@@ -1,0 +1,38 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  /* display: grid; */
+  margin: 100px auto;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.button {
+  padding: 12px;
+  width: 80px;
+  height: 80px;
+}
+.button-container {
+  margin-top: 12px;
+}
+
+.small-display {
+  padding: 10px;
+}
+.result-display {
+  padding: 10px;
+  height: 80px;
+  font-size: 32px;
+}
+.output {
+  text-align: right;
+  border: 1px solid black;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
