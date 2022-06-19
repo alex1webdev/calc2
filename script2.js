@@ -25,13 +25,12 @@ selectButtons.forEach((btn) => {
   let b = "";
   let op = "";
 
-  let res = 0;
-
   ////////
 
   btn.addEventListener("click", () => {
     let value = btn.getAttribute("data-value");
     step += 1;
+    let res = "";
 
     if (checkEqualsPressed(value) >= 2) return;
 
@@ -94,32 +93,14 @@ selectButtons.forEach((btn) => {
     //   console.log("rawInput at COUNTER=2:", rawInput);
     // }
 
-    if ((a, b) && op === "+" && value === "=") {
-      res = add(a, b);
-      rawInput = res;
-      console.log("rawInput after SUM:", rawInput);
-      console.log("YESS Result:", res);
-    }
-    if ((a, b) && op === "*" && value === "=") {
-      res = multiply(a, b);
-      rawInput = res;
-      console.log("rawInput after MULTIPLY:", rawInput);
-      console.log("YESS Result MULTIPLY:", res);
-    }
-    if ((a, b) && op === "-" && value === "=") {
-      res = subtract(a, b);
-      rawInput = res;
-      console.log("rawInput after SUBTRACT:", rawInput);
-      console.log("YESS Result SUBTRACT:", res);
-    }
-    if ((a, b) && op === "/" && value === "=") {
-      res = divide(a, b);
-      rawInput = res;
-      console.log("rawInput after DIVIDE:", rawInput);
-      console.log("YESS Result DIVIDE:", res);
+    ///////////////------------////////////////////
+    if ((a, b) && value === "=") {
+      rawInput = calculate(a, b, op, res);
     }
 
+    /////////////////////------------------//////////////////
     console.log("OPERANDCOUNTER", operandCounter);
+    console.log("RESULT", res);
     console.log("rawInput:", rawInput);
     console.log("Step #", step);
 
@@ -217,4 +198,47 @@ function multipleOperandCount(op) {
   }
 
   return res;
+}
+
+function calculate(a, b, op, res) {
+  if (op === "+") {
+    res = add(a, b);
+  }
+  if (op === "-") {
+    res = subtract(a, b);
+  }
+  if (op === "*") {
+    res = multiply(a, b);
+  }
+  if (op === "/") {
+    res = divide(a, b);
+  }
+  // if ((a, b) && value === "=") {
+  //   if (op === "+") {
+  //     res = add(a, b);
+  //     rawInput = res;
+  //     console.log("rawInput after SUM:", rawInput);
+  //     console.log("YESS Result:", res);
+  //   }
+  //   if (op === "*") {
+  //     res = multiply(a, b);
+  //     rawInput = res;
+  //     console.log("rawInput after MULTIPLY:", rawInput);
+  //     console.log("YESS Result MULTIPLY:", res);
+  //   }
+  //   if (op === "-") {
+  //     res = subtract(a, b);
+  //     rawInput = res;
+  //     console.log("rawInput after SUBTRACT:", rawInput);
+  //     console.log("YESS Result SUBTRACT:", res);
+  //   }
+  //   if (op === "/") {
+  //     res = divide(a, b);
+  //     rawInput = res;
+  //     console.log("rawInput after DIVIDE:", rawInput);
+  //     console.log("YESS Result DIVIDE:", res);
+  //   }
+  // }
+  rawInput = res;
+  return rawInput;
 }
