@@ -16,7 +16,9 @@ let equalsCounter = 0;
 const numberAMatch = /[0-9]*/;
 const numberBMatch = /[+-\/*][0-9]+/;
 
-const operandMatch = /[0-9][+-\/*]/;
+// const operandMatch1 = /[0-9][+-\/*]/;
+const operandMatch = /[+-\/*][0-9]/;
+// const operandMatch2 = /[+-\/*][0-9]+$/;
 const firstExpression = /[0-9]+[+-\/*]+[0-9]+[+-\/*]/;
 
 selectButtons.forEach((btn) => {
@@ -41,6 +43,11 @@ selectButtons.forEach((btn) => {
       console.log("checked match a:", a);
     }
 
+    // let y = rawInput.match(/[+-\/*][0-9]+$/);
+    // if (y !== null) {
+    //   console.log("TEST:", y[0][0]);
+    // }
+
     if (rawInput.match(operandMatch)) {
       op = checkOperandMatch(op);
 
@@ -63,7 +70,7 @@ selectButtons.forEach((btn) => {
       // operandCounter = 2;
 
       // rawInput = multipleOperandCount(op);
-
+      console.log("SLICED: ", rawInput.match(/[0-9]+[+-\/*]+$/)[0].slice(-1));
       console.log("THIS op original:", op);
       console.log("THIS rawInput original:", rawInput);
       rawInput =
@@ -151,7 +158,15 @@ function checkAMatch() {
 }
 
 function checkOperandMatch(op) {
-  op = rawInput.match(operandMatch)[0][1];
+  // if (rawInput.match(operandMatch2)) {
+  //   op = rawInput.match(operandMatch2)[0][0];
+  //   console.log("MATCHED 2", op);
+  // }
+  if (rawInput.match(operandMatch)) {
+    op = rawInput.match(operandMatch)[0][0];
+    // console.log("MATCHED 1", rawInput.match(operandMatch));
+    // console.log("MATCHED 1 Sliced", op);
+  }
   return op;
 }
 
