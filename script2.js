@@ -13,13 +13,25 @@ let operandCounter = 0;
 let step = 0;
 let equalsCounter = 0;
 
-const numberAMatch = /[0-9]*/;
-const numberBMatch = /[+-\/*][0-9]+/;
+// const numberAMatch = /[0-9.]*/;
+const numberAMatch = /[0-9]+[.]?([0-9]+)?/;
+// const numberBMatch = /[+-\/*%][0-9.]+$/;
+// const numberBMatch = /[+-\/*%][0-9]+[.]?([0-9]+)?/;
+// const numberBMatch = /[+-\/*%][0-9]+[.]?([0-9]+)?$/;
+// const numberBMatch = /[^0-9.][^+-\/*%][0-9.]+$/;
+const numberBMatch = /[+\-\/*]{1}[0-9.]+$/;
 
-// const operandMatch1 = /[0-9][+-\/*]/;
-const operandMatch = /[+-\/*][0-9]/;
-// const operandMatch2 = /[+-\/*][0-9]+$/;
-const firstExpression = /[0-9]+[+-\/*]+[0-9]+[+-\/*]/;
+// const operandMatch = /[+-\/*%][0-9.]$/;
+// const operandMatch = /[+\-*\/*]+[0-9]+[.]?([0-9]+)?/;
+// const operandMatch = /([0-9]+)?[.]?([0-9]+)?[+\-*\/]$/;
+const operandMatch = /[+\-*\/][0-9.]/;
+// const percentMatch = /[0-9.]+[+-\/*%]+/;
+
+// const firstExpression = /[0-9.]+[+-\/*%]+[0-9.]+[+-\/*%]/;
+// const firstExpression = /[0-9]+[.]?([0-9]+)?[+-\/*%]+[0-9]+[.]?([0-9]+)?/;
+const firstExpression = /[0-9.]+[+\-\/*]+[0-9.]+[+\-\/*]/;
+const firstTest1 = /[0-9.]+[+-\/*]+/;
+// const firstExpression = /([0-9]+)[.]?([0-9]+)?[+\-\/*%]+([0-9]+)[.]?([0-9]+)?/;
 
 selectButtons.forEach((btn) => {
   /////////
@@ -39,8 +51,11 @@ selectButtons.forEach((btn) => {
     rawInput += value;
 
     if (rawInput.match(numberAMatch)) {
-      a = checkAMatch();
-      console.log("checked match a:", a);
+      a = parseFloat(checkAMatch());
+      // if (value === "/") {
+      //   rawInput = a / 100;
+      // }
+      console.log("match a?:", a);
     }
 
     // let y = rawInput.match(/[+-\/*][0-9]+$/);
@@ -62,7 +77,7 @@ selectButtons.forEach((btn) => {
     }
 
     if (rawInput.match(numberBMatch)) {
-      b = checkBMatch();
+      b = parseFloat(checkBMatch());
       console.log("match b?: ", b);
     }
 
@@ -70,16 +85,43 @@ selectButtons.forEach((btn) => {
       // operandCounter = 2;
 
       // rawInput = multipleOperandCount(op);
-      console.log("SLICED: ", rawInput.match(/[0-9]+[+-\/*]+$/)[0].slice(-1));
+      // console.log("SLICED: ", rawInput.match(/[0-9]+[+-\/*]+$/)[0].slice(-1));
       console.log("THIS op original:", op);
       console.log("THIS rawInput original:", rawInput);
+      // console.log(
+      //   "------FIRST Expression match adding op ",
+      //   rawInput.match(/[^0-9.][+-\/*]{0}[0-9.]/)[0].slice(-1)
+      // );
+
       rawInput =
         multipleOperandCount(op) +
-        rawInput.match(/[0-9]+[+-\/*]+$/)[0].slice(-1);
+        rawInput.match(/[^0-9.][+-\/*]{0}[0-9.]/)[0][0];
+      // rawInput =
+      //   multipleOperandCount(op) +
+      //   rawInput.match(/([0-9]+)[.]?([0-9]+)?[+\-\/*%]+/)[0].slice(-1);
 
+      // if (value === "/") {
+      //   rawInput = rawInput / 100;
+      // }
       console.log("THIS IS OP", op);
 
-      console.log("FIRST EXPRESSION and operandValue", operandCounter);
+      // console.log("FIRST EXPRESSION and operandValue", operandCounter);
+    }
+    ////////////////////////
+    // if (rawInput.match(percentMatch) && value === "=") {
+    //   console.log("YESS %%%%", rawInput.match(percentMatch));
+    //   rawInput = percent(a);
+    // }
+    //////////////////////////////
+
+    if (value === "C") {
+      rawInput = rawInput.slice(0, -2);
+    }
+    if (value === "AC") {
+      a = "";
+      b = "";
+      op = "";
+      rawInput = "";
     }
 
     ///////////////////////////////
@@ -152,8 +194,6 @@ function checkBMatch() {
 
 function checkAMatch() {
   a = +rawInput.match(numberAMatch)[0];
-
-  // console.log("match a?: ", a);
   return a;
 }
 
@@ -163,8 +203,14 @@ function checkOperandMatch(op) {
   //   console.log("MATCHED 2", op);
   // }
   if (rawInput.match(operandMatch)) {
+    console.log("TESTING NEW OP MATCH before:", rawInput.match(operandMatch));
+    // console.log(
+    //   "TESTING NEW OP MATCH after:",
+    //   rawInput.match(operandMatch)[0].slice(-1)
+    // );
     op = rawInput.match(operandMatch)[0][0];
-    // console.log("MATCHED 1", rawInput.match(operandMatch));
+    // op = rawInput.match(operandMatch)[0].slice(-1);
+    console.log("TESTING SLICED OP", op);
     // console.log("MATCHED 1 Sliced", op);
   }
   return op;
@@ -183,11 +229,27 @@ function divide(a, b) {
   return a / b;
 }
 
+function percent(a, firstExpression) {
+  if (a) {
+    res = a / 100;
+  }
+  if (firstExpression) {
+    res = rawInput / 100;
+  }
+  return res;
+}
+
 function checkEqualsPressed(value) {
   if (value === "=") {
     equalsCounter += 1;
   }
-  if (value === "+" || value === "*" || value === "-" || value === "/") {
+  if (
+    value === "+" ||
+    value === "*" ||
+    value === "-" ||
+    value === "/" ||
+    value === "%"
+  ) {
     equalsCounter = 0;
   }
   return equalsCounter;
@@ -210,6 +272,9 @@ function multipleOperandCount(op) {
   if (op === "*") {
     res = multiply(a, b);
     console.log("******multiply res", res);
+  }
+  if (op === "%") {
+    res = percent(a, firstExpression);
   }
 
   return res;
