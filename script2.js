@@ -50,6 +50,9 @@ selectButtons.forEach((btn) => {
 
     if (value !== "C" && value !== "=") {
       selectSmallDisplay.textContent = rawInput;
+      if (rawInput.match(/[0-9.]+[+\/*\-]+/)) {
+        console.log("REEEEEED");
+      }
     }
     if (value === "C") {
       selectSmallDisplay.textContent = rawInput.slice(0, -2);
@@ -70,9 +73,9 @@ selectButtons.forEach((btn) => {
 
       operandCounter += 1;
 
-      if (operandCounter === 2) {
-        operandCounter = 1;
-      }
+      // if (operandCounter === 2) {
+      //   operandCounter = 1;
+      // }
 
       console.log("found op HERE", op);
     }
@@ -124,6 +127,8 @@ selectButtons.forEach((btn) => {
         // selectResultDisplay.textContent = res;
         console.log("percentMatch2=>percentMatch1", res);
       }
+      selectResultDisplay.textContent = rawInput;
+      return;
     }
 
     ////////////////////////////////////////
@@ -233,22 +238,23 @@ function multipleOperandCount(op) {
     console.log("******multiply res", res);
   }
 
+  // return res.toFixed(2);
   return res;
 }
 
-function calculate(a, b, op, res) {
-  if (op === "+") {
-    res = add(a, b);
-  }
-  if (op === "-") {
-    res = subtract(a, b);
-  }
-  if (op === "*") {
-    res = multiply(a, b);
-  }
-  if (op === "/") {
-    res = divide(a, b);
-  }
-  rawInput = res;
-  return rawInput;
-}
+// function calculate(a, b, op, res) {
+//   if (op === "+") {
+//     res = add(a, b);
+//   }
+//   if (op === "-") {
+//     res = subtract(a, b);
+//   }
+//   if (op === "*") {
+//     res = multiply(a, b);
+//   }
+//   if (op === "/") {
+//     res = divide(a, b);
+//   }
+//   rawInput = res;
+//   return rawInput;
+// }

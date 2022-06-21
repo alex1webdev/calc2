@@ -1,11 +1,10 @@
-* {
+/* * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
 .container {
-  /* display: grid; */
   margin: 100px auto;
   width: 300px;
   display: flex;
@@ -36,4 +35,142 @@
   display: flex;
   justify-content: end;
   align-items: center;
+} */
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: grid;
+  margin: 100px auto;
+  width: 320px;
+  /* border: 1px solid black; */
+  /* border-radius: 12px; */
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.2fr 0.6fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "display-small display-small display-small display-small"
+    "display-result display-result display-result display-result"
+    "AC C percent divide"
+    "seven eight nine multiply"
+    "four five six subtract"
+    "one two three add"
+    "zero zero dot equals";
+}
+
+.button {
+  width: 80px;
+  height: 80px;
+  border: 1px solid black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.small-display {
+  grid-area: display-small;
+  border: 1px solid black;
+  height: 40px;
+  text-align: right;
+  padding: 8px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.result-display {
+  grid-area: display-result;
+  border: 1px solid rgb(238, 18, 18);
+  height: 80px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 8px;
+  font-size: 32px;
+}
+
+.zero {
+  grid-area: zero;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 160px;
+  border-bottom-left-radius: 12px;
+}
+
+.dot {
+  grid-area: dot;
+}
+.percent {
+  grid-area: percent;
+}
+
+.equals {
+  grid-area: equals;
+  border-bottom-right-radius: 12px;
+}
+
+.add {
+  grid-area: add;
+}
+
+.subtract {
+  grid-area: subtract;
+}
+
+.multiply {
+  grid-area: multiply;
+}
+
+.divide {
+  grid-area: divide;
+}
+
+.one {
+  grid-area: one;
+}
+
+.two {
+  grid-area: two;
+}
+
+.three {
+  grid-area: three;
+}
+
+.four {
+  grid-area: four;
+}
+
+.five {
+  grid-area: five;
+}
+
+.six {
+  grid-area: six;
+}
+
+.seven {
+  grid-area: seven;
+}
+
+.eight {
+  grid-area: eight;
+}
+
+.nine {
+  grid-area: nine;
+}
+
+.AC {
+  grid-area: AC;
+}
+
+.C {
+  grid-area: C;
 }
