@@ -15,24 +15,19 @@ let equalsCounter = 0;
 
 // const numberAMatch = /[0-9.]*/;
 const numberAMatch = /[0-9]+[.]?([0-9]+)?/;
+
 // const numberBMatch = /[+-\/*%][0-9.]+$/;
-// const numberBMatch = /[+-\/*%][0-9]+[.]?([0-9]+)?/;
-// const numberBMatch = /[+-\/*%][0-9]+[.]?([0-9]+)?$/;
-// const numberBMatch = /[^0-9.][^+-\/*%][0-9.]+$/;
 const numberBMatch = /[+\-\/*]{1}[0-9.]+$/;
 
 // const operandMatch = /[+-\/*%][0-9.]$/;
-// const operandMatch = /[+\-*\/*]+[0-9]+[.]?([0-9]+)?/;
-// const operandMatch = /([0-9]+)?[.]?([0-9]+)?[+\-*\/]$/;
 const operandMatch = /[+\-*\/][0-9.]/;
 // const percentMatch = /[0-9.]+[+-\/*%]+/;
 
 // const firstExpression = /[0-9.]+[+-\/*%]+[0-9.]+[+-\/*%]/;
-// const firstExpression = /[0-9]+[.]?([0-9]+)?[+-\/*%]+[0-9]+[.]?([0-9]+)?/;
 const firstExpression = /[0-9.]+[+\-\/*]+[0-9.]+[+\-\/*]/;
-const firstTest1 = /[0-9.]+[+-\/*]+/;
-// const firstExpression = /([0-9]+)[.]?([0-9]+)?[+\-\/*%]+([0-9]+)[.]?([0-9]+)?/;
+const firstExpressionEquals = /[0-9.]+[+\-\/*]+[0-9.]+[=]/;
 
+const percentMatch1 = /[0-9.]+%$/;
 selectButtons.forEach((btn) => {
   /////////
   let a = "";
@@ -107,6 +102,10 @@ selectButtons.forEach((btn) => {
 
       // console.log("FIRST EXPRESSION and operandValue", operandCounter);
     }
+
+    if (rawInput.match(firstExpressionEquals)) {
+      rawInput = multipleOperandCount(op);
+    }
     ////////////////////////
     // if (rawInput.match(percentMatch) && value === "=") {
     //   console.log("YESS %%%%", rawInput.match(percentMatch));
@@ -124,28 +123,10 @@ selectButtons.forEach((btn) => {
       rawInput = "";
     }
 
-    ///////////////////////////////
-
-    // if (operandCounter === 2) {
-    //   // op = checkOperandMatch(op);
-    //   // console.log("OPERAND COUNTER =2");
-    //   rawInput = multipleOperandCount(op);
-    // }
-
-    /////////////////////////////
-
-    // if (operandCounter === 2) {
-    //   res = add(a, b);
-    //   rawInput = res + op;
-
-    //   operandCounter = 0;
-    //   console.log("rawInput at COUNTER=2:", rawInput);
-    // }
-
     ///////////////------------////////////////////
-    if ((a, b) && value === "=") {
-      rawInput = calculate(a, b, op, res);
-    }
+    // if ((a, b, op) && value === "=") {
+    //   rawInput = calculate(a, b, op, res);
+    // }
 
     /////////////////////------------------//////////////////
     console.log("OPERANDCOUNTER", operandCounter);
