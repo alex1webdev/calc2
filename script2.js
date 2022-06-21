@@ -2,7 +2,7 @@ const selectSmallDisplay = document.querySelector(".small-display");
 selectSmallDisplay.textContent = "";
 
 const selectResultDisplay = document.querySelector(".result-display");
-selectResultDisplay.textContent = "Result";
+// selectResultDisplay.textContent = "Result";
 
 const selectButtons = document.querySelectorAll(".button");
 
@@ -48,11 +48,22 @@ selectButtons.forEach((btn) => {
 
     rawInput += value;
 
+    if (value !== "C" && value !== "=") {
+      selectSmallDisplay.textContent = rawInput;
+    }
+    if (value === "C") {
+      selectSmallDisplay.textContent = rawInput.slice(0, -2);
+    }
+
+    ////////////////////////////////////////
+
     if (rawInput.match(numberAMatch)) {
       a = parseFloat(checkAMatch());
 
       console.log("match a?:", a);
     }
+
+    ////////////////////////////////////////
 
     if (rawInput.match(operandMatch)) {
       op = checkOperandMatch(op);
@@ -66,87 +77,75 @@ selectButtons.forEach((btn) => {
       console.log("found op HERE", op);
     }
 
+    ////////////////////////////////////////
+
     if (rawInput.match(numberBMatch)) {
       b = parseFloat(checkBMatch());
       console.log("match b?: ", b);
     }
 
+    ////////////////////////////////////////
+
     if (rawInput.match(firstExpression)) {
-      console.log("THIS op original:", op);
-      console.log("THIS rawInput original:", rawInput);
-      console.log(
-        "THIS rawInput.match",
-        rawInput.match(/[0-9.]+[+-\/*]+[0-9.]+[+-\/*]+/)[0].slice(-1)
-      );
       rawInput =
         multipleOperandCount(op) +
         rawInput.match(/[0-9.]+[+-\/*]+[0-9.]+[+-\/*]+/)[0].slice(-1);
-      // rawInput =
-      //   multipleOperandCount(op) +
-      //   rawInput.match(/[^0-9.][+-\/*]{0}[0-9.]/)[0][0];
-      // rawInput =
-      //   multipleOperandCount(op) +
-      //   rawInput.match(/([0-9]+)[.]?([0-9]+)?[+\-\/*%]+/)[0].slice(-1);
 
+      selectResultDisplay.textContent = rawInput.slice(0, -1);
       console.log("THIS IS OP", op);
     }
 
+    ////////////////////////////////////////
     if (value === "C") {
       rawInput = rawInput.slice(0, -2);
     }
     if (value === "AC") {
-      a = "";
-      b = "";
-      op = "";
-      rawInput = "";
+      ac();
     }
+
+    ////////////////////////////////////////
 
     if (rawInput.match(firstExpressionEquals)) {
       rawInput = multipleOperandCount(op);
+      // selectResultDisplay.textContent = res;
+      selectResultDisplay.textContent = rawInput;
       return;
     }
-    ////////////////////////
-    console.log("MIDDLE rawInput:", rawInput);
-    /////////////////////////
-    // console.log("MIDDLE TEST match:", rawInput.match(percentMatch1));
-    /////////////////////////
+
+    ////////////////////////////////////////
+
     if (rawInput.match(percentMatch2)) {
       let percentRemains = rawInput.match(percentMatch1)[0].slice(-2);
       rawInput = multipleOperandCount(op) + percentRemains;
       if (rawInput.match(percentMatch1)) {
         a = parseFloat(checkAMatch());
-        rawInput = percent(a);
 
-        console.log("percentMatch2=>percentMatch1", rawInput);
+        rawInput = percent(a);
+        // selectResultDisplay.textContent = res;
+        console.log("percentMatch2=>percentMatch1", res);
       }
-      // console.log("rawInput after percentRemains", rawInput);
-      // // console.log(
-      // //   "percentMatch2!!! rawInput.match1:",
-      // //   rawInput.match(percentMatch1).
-      // // );
-      return;
     }
-    ////////////////////////
+
+    ////////////////////////////////////////
+
     if (rawInput.match(percentMatch1)) {
       console.log("percentMatch1", rawInput.match(percentMatch1));
 
       rawInput = percent(a);
 
-      // + rawInput.match(percentMatch1)[0].slice(-1);
       console.log("PERCENT RESULT:", rawInput);
-      return;
+      selectResultDisplay.textContent = rawInput;
+      // return;
     }
 
-    //////////////////////////////
+    ////////////////////////////////////////
 
-    /////////////////////------------------//////////////////
     console.log("OPERANDCOUNTER", operandCounter);
     console.log("RESULT", res);
     console.log("rawInput:", rawInput);
     console.log("Step #", step);
 
     console.log("       ");
-    // selectSmallDisplay.textContent = smallContent;
   });
 });
 
@@ -172,6 +171,15 @@ function checkOperandMatch(op) {
   return op;
 }
 
+function ac() {
+  a = "";
+  b = "";
+  op = "";
+  rawInput = "";
+  selectSmallDisplay.textContent = "";
+  selectResultDisplay.textContent = "";
+}
+
 function add(a, b) {
   return a + b;
 }
@@ -186,15 +194,7 @@ function divide(a, b) {
 }
 
 function percent(a) {
-  // if (rawInput.match(percentMatch1)) {
   res = a / 100;
-  // }
-  // if (rawInput.match(percentMatch2)) {
-  //   res = multipleOperandCount(op) / 100;
-  // }
-  // if (firstExpression) {
-  //   res = rawInput / 100;
-  // }
   return res;
 }
 
@@ -232,9 +232,6 @@ function multipleOperandCount(op) {
     res = multiply(a, b);
     console.log("******multiply res", res);
   }
-  // if (op === "%") {
-  //   res = percent(a);
-  // }
 
   return res;
 }
