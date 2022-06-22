@@ -17,7 +17,7 @@ const operandMatch = /[+\-*\/][0-9\.]/;
 const firstExpression = /\-?[0-9\.]+[+\-\/*]+[0-9\.]+[+\-\/*]/;
 const firstExpressionSlice = /\-?[0-9.]+[+-\/*]+[0-9.]+[+-\/*]+/;
 // const firstExpressionEquals = /[0-9\.]+[+\-\/*]+[0-9\.]+[=]/;
-const firstExpressionEquals = /\-?[0-9\.]+[+\-\/*]+[0-9\.]+[=]/;
+const firstExpressionEquals = /[0-9\.]+[+\-\/*]+[0-9\.]+[=]/;
 
 const percentMatch1 = /[0-9\.]+([+\/*\-%]+)?[%][=]/;
 const percentMatch2 = /[0-9\.]+[+\/*\-%]+[0-9\.]+([+\/*\-%]+)?[%][=]/;
@@ -54,6 +54,9 @@ selectButtons.forEach((btn) => {
     if (rawInput.match(numberAMatch)) {
       a = parseFloat(checkAMatch());
       console.log("match a?:", a);
+      console.log("a rawinput", rawInput);
+      rawInput;
+      console.log("a rawinput after", rawInput);
     }
 
     if (rawInput.match(smallDisplayMatch1)) {
@@ -62,21 +65,6 @@ selectButtons.forEach((btn) => {
     }
 
     ////////////////////////////////////////
-
-    // if (rawInput.match(testMatch)) {
-    //   console.log("RawInput", rawInput);
-    //   console.log("a:", a);
-    //   console.log("OP before", op);
-    //   // console.log("matching this: ", rawInput.match(/[+\-\/*][0-9\.]+$/)[0][0]);
-    //   op = rawInput.match(/[+\-\/*][0-9\.]+$/)[0][0];
-
-    //   console.log("b after:", b);
-    //   console.log("OP after", op);
-    //   console.log("result:", rawInput);
-    // }
-    // if (rawInput.match(/\-[0-9\.]+[+\-\/*]+[0-9\.]+[=]/)) {
-    //   console.log("FOUND");
-    // }
 
     //////////////////////////////////////
     if (rawInput.match(operandMatch)) {
@@ -97,12 +85,6 @@ selectButtons.forEach((btn) => {
     ////////////////////////////////////////
 
     /////////////////////////////
-
-    // if (rawInput.match(operandMatch) && a && b) {
-    //   console.log("^^^^^^^^YES");
-    // }
-
-    /////////////////////////////
     if (rawInput.match(firstExpression)) {
       console.log("cheking firstExpression");
       console.log("rawInput:", rawInput);
@@ -120,13 +102,6 @@ selectButtons.forEach((btn) => {
 
     //////////////////////////////////////
 
-    // if (rawInput.match(operandMatch) && b) {
-    //   if (a !== /\-[0-9\.]+/) {
-    //     console.log("wrong");
-    //     selectSmallDisplay.textContent = a + op + b;
-    //   }
-    // }
-
     ////////////////////////////////////////
     if (value === "C") {
       rawInput = rawInput.slice(0, -2);
@@ -135,27 +110,15 @@ selectButtons.forEach((btn) => {
       ac();
     }
     /////////////////////////////
-    // if (rawInput.match(/\-[0-9\.]+[+\/\-*]+[+][0-9\.]+=/)) {
-    //   console.log("YESSS");
-    //   console.log("OP", op);
-    //   console.log("matching:", rawInput.match(/[+\-*\/]{2}[0-9\.]/));
-    //   console.log("OP after", op);
-    //   // let uMatch = /[^0-9\.\-][+\/\-*]+[0-9\.]/;
-    //   // let yy = u.match(uMatch)[0].slice(-2, -1);
-    //   let uMatch = rawInput.match(/\-?[+\-\/*][0-9\.]+[=]/)[0].slice(-3, -2);
-    //   // let test = rawInput.match(uMatch);
-    //   console.log("uMatch:", uMatch);
-    // }
-    ////////////////////////////////////////
 
     if (rawInput.match(firstExpressionEquals)) {
+      if (rawInput.match(/\-[0-9.]+/)) {
+        op = rawInput.match(/[+\-\/*][0-9\.]+=$/)[0].slice(0, 1);
+      }
       console.log("cheking2");
       console.log("rawInput:", rawInput);
       console.log("op", op);
       console.log("b:", b);
-      // console.log("test", rawInput.match(/[+\-\/*]{1}[0-9\.]+/)[0].slice(1));
-      // selectSmallDisplay.textContent =
-      //   a + op + rawInput.match(/[+\-\/*]{1}[0-9\.]+/)[0].slice(1);
 
       rawInput = multipleOperandCount(op);
       console.log("rawinput after ", rawInput);
@@ -176,6 +139,7 @@ selectButtons.forEach((btn) => {
 
       return;
     }
+
     console.log("OP", op);
     ////////////////////////////////////////
 
@@ -186,11 +150,6 @@ selectButtons.forEach((btn) => {
       selectResultDisplay.textContent = rawInput;
     }
 
-    ////////////////////////////////////////
-    // if (rawInput.match(/[0-9.]+[+\-*\/]+[0-9.]+/)) {
-    //   selectSmallDisplay.textContent = a + op + b;
-    // }
-    /////////////////////////////////////////
     console.log("       ");
   });
 });
