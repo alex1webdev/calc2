@@ -2,7 +2,6 @@ const selectSmallDisplay = document.querySelector(".small-display");
 const selectResultDisplay = document.querySelector(".result-display");
 const selectButtons = document.querySelectorAll(".button");
 
-// let smallContentRaw = "";
 let rawInput = "";
 // let step = 0;
 let equalsCounter = 0;
@@ -11,8 +10,6 @@ const numberAMatch = /\-?[0-9]+[.]?([0-9]+)?/;
 const numberBMatch = /[+\-\/*]{1}[0-9\.]+$/;
 
 const operandMatch = /[+\-*\/][0-9\.]/;
-// const operandMatch = /[+\-*\/][0-9\.]+$/;
-// const testMatch = /\-[0-9.]+[+\/\-*]+[0-9.]+/;
 
 const firstExpression = /\-?[0-9\.]+[+\-\/*]+[0-9\.]+[+\-\/*]/;
 const firstExpressionSlice = /\-?[0-9.]+[+-\/*]+[0-9.]+[+-\/*]+/;
@@ -23,15 +20,22 @@ const percentMatch1 = /[0-9\.]+([+\/*\-%]+)?[%][=]/;
 const percentMatch2 = /[0-9\.]+[+\/*\-%]+[0-9\.]+([+\/*\-%]+)?[%][=]/;
 
 const smallDisplayMatch1 = /[+\-*\/]$/;
+const smallDisplaySlice = /[\-+\/*][0-9\.]+$/;
+
+const multipleOperandMatch = /([0-9.]+)([+\-\/*]+)[0-9.]+/;
+const negMultOperandMatch = /\-([0-9.]+)([+\-\/*]+)[0-9.]+/;
 // const smallDisplayMatch2 = /\-?[0-9\.]+[+\-*\/]+[0-9\.]+/;
+
+/////////////////////////////////////////////////////////////////
 
 selectButtons.forEach((btn) => {
   /////////
+
   let a = "";
   let b = "";
   let op = "";
 
-  ////////
+  /////////////////**EVENT START*****/////////////////////
 
   btn.addEventListener("click", () => {
     let value = btn.getAttribute("data-value");
@@ -54,24 +58,21 @@ selectButtons.forEach((btn) => {
     if (rawInput.match(numberAMatch)) {
       a = parseFloat(checkAMatch());
       console.log("match a?:", a);
-      console.log("a rawinput", rawInput);
-      rawInput;
-      console.log("a rawinput after", rawInput);
     }
 
     if (rawInput.match(smallDisplayMatch1)) {
-      console.log("TEEESSSTT");
       selectSmallDisplay.textContent = a + rawInput.match(smallDisplayMatch1);
     }
 
-    ////////////////////////////////////////
-
     //////////////////////////////////////
+
     if (rawInput.match(operandMatch)) {
       console.log("cheking3");
       op = checkOperandMatch(op);
-      console.log("a", a);
-      console.log("b", b);
+      // selectSmallDisplay.textContent = a + op + b;
+      console.log("cheking3 OP", op);
+      console.log(" cheking3 a", a);
+      console.log(" cheking3 b", b);
       console.log("rawInput", rawInput);
     }
 
@@ -82,46 +83,52 @@ selectButtons.forEach((btn) => {
       console.log("match b?: ", b);
     }
 
+    ////////////////////////////////////
+
+    if (value === "C") {
+      rawInput = rawInput.slice(0, -2);
+      op = rawInput.match(smallDisplaySlice)[0][0];
+      b = parseFloat(checkBMatch());
+      selectSmallDisplay.textContent = a + op + b;
+    }
+
     ////////////////////////////////////////
 
-    /////////////////////////////
-    if (rawInput.match(firstExpression)) {
-      console.log("cheking firstExpression");
-      console.log("rawInput:", rawInput);
-      console.log("op", op);
-      console.log("b:", b);
+    if (
+      (rawInput.match(multipleOperandMatch) && b) ||
+      (rawInput.match(negMultOperandMatch) && b)
+    ) {
+      op = rawInput.match(smallDisplaySlice)[0][0];
+      selectSmallDisplay.textContent = a + op + b;
+    }
 
-      console.log("rawInput before", rawInput);
+    /////////////////////////////
+
+    if (rawInput.match(firstExpression)) {
       rawInput =
         multipleOperandCount(op) +
         rawInput.match(firstExpressionSlice)[0].slice(-1);
-
-      console.log("rawInput after", rawInput);
       selectResultDisplay.textContent = rawInput.slice(0, -1);
+      selectSmallDisplay.textContent = rawInput.slice(0, -1) + op;
     }
 
     //////////////////////////////////////
 
+    checkEqualsVsOperands();
+
     ////////////////////////////////////////
-    if (value === "C") {
-      rawInput = rawInput.slice(0, -2);
-    }
+
     if (value === "AC") {
       ac();
     }
+
     /////////////////////////////
 
     if (rawInput.match(firstExpressionEquals)) {
       if (rawInput.match(/\-[0-9.]+/)) {
         op = rawInput.match(/[+\-\/*][0-9\.]+=$/)[0].slice(0, 1);
       }
-      console.log("cheking2");
-      console.log("rawInput:", rawInput);
-      console.log("op", op);
-      console.log("b:", b);
-
       rawInput = multipleOperandCount(op);
-      console.log("rawinput after ", rawInput);
       selectResultDisplay.textContent = rawInput;
       return;
     }
@@ -140,19 +147,22 @@ selectButtons.forEach((btn) => {
       return;
     }
 
-    console.log("OP", op);
     ////////////////////////////////////////
 
     if (rawInput.match(percentMatch1)) {
-      // console.log("percentMatch1", rawInput.match(percentMatch1));
       rawInput = percent(a);
-
       selectResultDisplay.textContent = rawInput;
     }
 
+    /////////////////////////////////////////
+
     console.log("       ");
   });
+
+  /////////////////**EVENT END*****/////////////////////
 });
+
+/////////////////////////////////////////////////////////////////
 
 function checkBMatch() {
   b = +rawInput.match(numberBMatch)[0].slice(1);
@@ -214,6 +224,15 @@ function checkEqualsPressed(value) {
   return equalsCounter;
 }
 
+function checkEqualsVsOperands() {
+  if (rawInput.match(/([0-9])?([+\-\/*]+)?=([+\-\/*]+)?[0-9]/)) {
+    console.log("ERROR");
+    selectSmallDisplay.textContent = "";
+    selectResultDisplay.textContent = "Error";
+    setTimeout(ac, 1000);
+  }
+}
+
 function multipleOperandCount(op) {
   let res, decimalCheck;
   if (op === "+") {
@@ -239,8 +258,3 @@ function multipleOperandCount(op) {
   }
   return res;
 }
-
-// let u = "-5.24+---+++----+++******+++--*/22332133.456";
-// let uMatch = /[^0-9\.\-][+\/\-*]+[0-9\.]/;
-// let yy = u.match(uMatch)[0].slice(-2, -1);
-// console.log(yy);
