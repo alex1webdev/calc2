@@ -3,12 +3,15 @@
   margin: 0;
   box-sizing: border-box;
   font-family: poppins;
+  background-color: #343a40;
 }
 
 .container {
   display: grid;
   margin: 100px auto;
   width: 320px;
+  border-radius: 12px;
+  box-shadow: rgba(46, 46, 46, 0.2) 0px 48px 100px 0px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 0.2fr 0.6fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr;
   /* gap: 0px 0px; */
@@ -21,6 +24,12 @@
     "four five six subtract"
     "one two three add"
     "zero zero dot equals";
+}
+
+.main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .button {

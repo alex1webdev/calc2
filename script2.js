@@ -9,35 +9,24 @@ const preventOperandStart1 = /^[+%*\/=]/;
 const preventOperandStart2 = /^-[+\-\/*=%]+/;
 
 const numberAMatch = /\-?[0-9]+[.]?([0-9]+)?/;
-const numberBMatch = /[+\-\/*]{1}[0-9\.]+$/;
+const numberBMatch = /[+\-\/*%]{1}[0-9\.]+$/;
 
-const operandMatch = /[+\-*\/][0-9\.]/;
+const operandMatch = /[+\-*\/%][0-9\.]/;
 
-const firstExpression = /\-?[0-9\.]+[+\-\/*]+[0-9\.]+[+\-\/*]/;
-const firstExpressionSlice = /\-?[0-9.]+[+-\/*]+[0-9.]+[+-\/*]+/;
-const firstExpressionEquals = /[0-9\.]+[+\-\/*]+[0-9\.]+[=]/;
+const firstExpression = /\-?[0-9\.]+[+\-\/*%]+[0-9\.]+[+\-\/*%]/;
+const firstExpressionSlice = /\-?[0-9.]+[+-\/*%]+[0-9.]+[+-\/*%]+/;
+const firstExpressionEquals = /\-?[0-9\.]+[+\-\/*%]+[0-9\.]+[=]/;
 
 const percentMatch1 = /[0-9\.]+([+\/*\-%]+)?[%][=]/;
 const percentMatch2 = /[0-9\.]+[+\/*\-%]+[0-9\.]+([+\/*\-%]+)?[%][=]/;
+const percentMatch3 = /[0-9\.]+([+\/*\-%]+)?[%][=]/;
+const percentMatch4 = /[0-9\.]+[%][0-9\.]+/;
 
-const smallDisplayMatch1 = /[+\-*\/]$/;
-const smallDisplaySlice = /[\-+\/*][0-9\.]+$/;
+const smallDisplayMatch1 = /[+\-*\/%]$/;
+const smallDisplaySlice = /[\-+\/*%][0-9\.]+$/;
 
-const multipleOperandMatch = /([0-9.]+)([+\-\/*]+)[0-9.]+/;
+const multipleOperandMatch = /([0-9.]+)([+\-\/*%]+)[0-9.]+/;
 const negMultOperandMatch = /\-([0-9.]+)([%+\-\/*]+)[0-9.]+/;
-
-// const findOverflows = () => {
-//   let width = selectResultDisplay.clientWidth;
-//   console.log(width);
-
-//   let box = selectResultDisplay.getBoundingClientRect();
-//   console.log(box);
-
-//   if (box.left >= width) {
-//     selectResultDisplay.style.border = "2px solid red";
-//   }
-//   let style = getComputedStyle(selectResultDisplay);
-// };
 
 /////////////////////////////////////////////////////////////////
 
@@ -56,8 +45,6 @@ selectButtons.forEach((btn) => {
     "keydown",
     function (e) {
       keyboard(e, a, b, op);
-      // findOverflows();
-      // console.log(selectResultDisplay.textContent.length);
     },
     true
   );
@@ -68,8 +55,6 @@ selectButtons.forEach((btn) => {
     calculator(value, a, b, op);
   });
 });
-
-// console.log(isOverflown(selectResultDisplay));
 
 //////////////////////////////////////
 //                                  //
@@ -166,7 +151,7 @@ function checkEqualsVsOperands() {
   if (rawInput.match(/([0-9])?([+\-\/*]+)?=([+\-\/*]+)?[0-9]/)) {
     selectSmallDisplay.textContent = "";
     selectResultDisplay.textContent = "Error";
-    setTimeout(ac, 1000);
+    // setTimeout(ac, 1000);
   }
 }
 
@@ -186,10 +171,19 @@ function multipleOperandCount(op) {
   if (op === "*") {
     res = multiply(a, b);
   }
+  if (op === "%") {
+    res = percent(a);
+  }
 
   decimalCheck = res - Math.floor(res) !== 0;
   if (decimalCheck) {
     res = res.toFixed(2);
+  }
+  console.log(res.toString().length);
+  if (res.toString().length >= 14) {
+    selectResultDisplay.setAttribute("class", "result-display-overflow");
+  } else {
+    selectResultDisplay.setAttribute("class", "result-display");
   }
   return res;
 }
@@ -292,10 +286,6 @@ function calculator(value, a, b, op) {
     }
     rawInput = multipleOperandCount(op);
     selectResultDisplay.textContent = rawInput;
-    // if (selectResultDisplay.textContent.length >= 14) {
-    //   console.log("YESS");
-    //   selectResultDisplay.setAttribute("class", "result-display-overflow");
-    // }
     return;
   }
 
@@ -309,7 +299,6 @@ function calculator(value, a, b, op) {
       rawInput = percent(a);
     }
     selectResultDisplay.textContent = rawInput;
-
     return;
   }
 
@@ -318,6 +307,11 @@ function calculator(value, a, b, op) {
   if (rawInput.match(percentMatch1)) {
     rawInput = percent(a);
     selectResultDisplay.textContent = rawInput;
+  }
+
+  if (rawInput.match(percentMatch4)) {
+    selectResultDisplay.textContent = "Error";
+    selectSmallDisplay.textContent = "";
   }
 }
 
@@ -403,7 +397,6 @@ function keyboard(e, a, b, op) {
       value = "AC";
       break;
     default:
-      // console.log(event.key, event.keyCode);
       return;
   }
   event.preventDefault();
@@ -411,5 +404,3 @@ function keyboard(e, a, b, op) {
 }
 
 /////////////////////////////////////////////////////////////////
-
-// console.log(selectResultDisplay.offsetWidth);
