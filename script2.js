@@ -5,8 +5,8 @@ const selectButtons = document.querySelectorAll(".button");
 let rawInput = "";
 let equalsCounter = 0;
 
-const preventOperandStart1 = /^[+%*\/=]/;
-const preventOperandStart2 = /^-[+\-\/*=%]+/;
+const preventOperandStart1 = /^[\.+%*\/=]/;
+const preventOperandStart2 = /^-[\.+\-\/*=%]+/;
 
 const numberAMatch = /\-?[0-9]+[.]?([0-9]+)?/;
 const numberBMatch = /[+\-\/*%]{1}[0-9\.]+$/;
@@ -27,6 +27,8 @@ const smallDisplaySlice = /[\-+\/*%][0-9\.]+$/;
 
 const multipleOperandMatch = /([0-9.]+)([+\-\/*%]+)[0-9.]+/;
 const negMultOperandMatch = /\-([0-9.]+)([%+\-\/*]+)[0-9.]+/;
+
+const multipleDotMatch = /[0-9][\.]{2}/;
 
 /////////////////////////////////////////////////////////////////
 
@@ -215,6 +217,18 @@ function calculator(value, a, b, op) {
   }
   if (value === "C") {
     selectSmallDisplay.textContent = rawInput.slice(0, -2);
+  }
+
+  //////
+
+  if (rawInput.match(multipleDotMatch)) {
+    // console.log(rawInput.match(/[0-9][\.]{1}/)[0][1]);
+    console.log("machjt test", rawInput.match(/[\.]+/)[0][0]);
+    console.log("rawinput before", rawInput);
+    rawInput = rawInput.match(/[0-9]+/) + rawInput.match(/[\.]+/)[0][0];
+    selectSmallDisplay.textContent = rawInput;
+    // rawInput.match(/[0-9][\.]{1}/)[0][1];
+    console.log("rawinput after", rawInput);
   }
 
   ///////////////////////////////////
