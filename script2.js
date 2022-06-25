@@ -29,6 +29,7 @@ const multipleOperandMatch = /([0-9.]+)([+\-\/*%]+)[0-9.]+/;
 const negMultOperandMatch = /\-([0-9.]+)([%+\-\/*]+)[0-9.]+/;
 
 const multipleDotMatch = /[0-9][\.]{2}/;
+const equalsOperandsMatch = /([0-9])?([+\-\/*]+)?=([+\-\/*]+)?[0-9]/;
 
 /////////////////////////////////////////////////////////////////
 
@@ -150,10 +151,9 @@ function checkEqualsPressed(value) {
 /////////////////////////////////////////////////////////////////
 
 function checkEqualsVsOperands() {
-  if (rawInput.match(/([0-9])?([+\-\/*]+)?=([+\-\/*]+)?[0-9]/)) {
+  if (rawInput.match(equalsOperandsMatch)) {
     selectSmallDisplay.textContent = "";
     selectResultDisplay.textContent = "Error";
-    // setTimeout(ac, 1000);
   }
 }
 
@@ -222,12 +222,10 @@ function calculator(value, a, b, op) {
   //////
 
   if (rawInput.match(multipleDotMatch)) {
-    // console.log(rawInput.match(/[0-9][\.]{1}/)[0][1]);
     console.log("machjt test", rawInput.match(/[\.]+/)[0][0]);
     console.log("rawinput before", rawInput);
     rawInput = rawInput.match(/[0-9]+/) + rawInput.match(/[\.]+/)[0][0];
     selectSmallDisplay.textContent = rawInput;
-    // rawInput.match(/[0-9][\.]{1}/)[0][1];
     console.log("rawinput after", rawInput);
   }
 
